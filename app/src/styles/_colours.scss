@@ -1,0 +1,22 @@
+
+$offset-white: #EEEEEE;
+$background-color: #222831;
+$first-shade: #393E46;
+$second-shade: #d2d3db;
+$third-shade: #9394a5;
+$offset-main: #484b6a;
+$main: #FFD369;
+$second: #6cdebc;
+
+
+:root {
+    // RIGHT, will work in all Sass versions.
+    --main: #{$main};
+    --second: #{$second};
+    --offset-main: #{$offset-main};
+    --first-shade: #{$first-shade};
+    --second-shade: #{$second-shade};
+    --third-shade: #{$third-shade};
+    --background-color: #{$background-color};
+    --offset-white: #{$offset-white};
+}

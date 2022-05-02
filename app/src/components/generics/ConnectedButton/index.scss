@@ -1,0 +1,26 @@
+.connected-button {
+
+    background: transparent;
+    outline: none;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.1s;
+    padding: 10px;
+    border-radius: 10px;
+    &:hover {
+        cursor: pointer;
+        background: var(--background-color);
+    }
+
+    h4 {
+        color: var(--offset-white);
+        margin-right: 20px;
+    }
+    .blockie {
+        height: 40px;
+        width: 40px;
+        border-radius: 10px;
+    }
+}

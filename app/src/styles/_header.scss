@@ -1,0 +1,32 @@
+
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    color: var(--main);
+    @include FS_Super_Bold;
+}
+
+$base-size: 5;
+
+h5 {
+    font-size: #{$base-size * 1.8}pt;
+}
+
+h4 {
+    font-size: #{$base-size * 2.8}pt;
+}
+
+h3 {
+    font-size: #{$base-size * 4}pt;
+}
+
+h2 {
+    font-size: #{$base-size * 5}pt;
+}
+
+h1 {
+    font-size: #{$base-size * 12}pt;
+}

@@ -1,0 +1,15 @@
+@import './colours';
+@import './reset';
+@import './fonts';
+@import './header';
+@import './mixins';
+@import './forms';
+@import './scrollbar';
+@import './charts';
+
+html {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    background: var(--background-color);
+}

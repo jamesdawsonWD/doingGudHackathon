@@ -1,0 +1,119 @@
+$xsm-font: 6pt;
+$sm-font: 8pt;
+$md-font: 11pt;
+$lg-font: 16pt;
+$xlg-font: 20pt;
+
+
+:root {
+    // RIGHT, will work in all Sass versions.
+    --xsm-font: #{$xsm-font};
+    --sm-font: #{$sm-font};
+    --md-font: #{$md-font};
+    --lg-font: #{$lg-font};
+    --xlg-font: #{$xlg-font};
+}
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@0,400;0,700&display=swap');
+@import url("https://use.typekit.net/qnz1vyv.css");
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&display=swap');
+
+$base-size: 5;
+$FS_light: 'Davis Sans Light';
+$FS_Light_Italic: 'Davis Sans Light Italic';
+$FS_Medium: 'Davis Sans Medium';
+$FS_Medium_Italic: 'Davis Sans Medium Italic';
+$FS_Regular: 'Davis Sans Regular';
+$FS_Bold: 'Davis Sans Bold';
+$FS_Bold_Italic: 'Davis Sans Bold Italic';
+
+@mixin FS_Light {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 300;
+
+    font-style: normal;
+}
+
+@mixin FS_Light_Italic {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 300;
+
+    font-style: italic;
+}
+
+@mixin FS_Italic {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 400;
+
+    font-style: italic;
+}
+
+@mixin FS_Medium {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 500;
+
+    font-style: normal;
+}
+
+@mixin FS_Regular {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 400;
+
+    font-style: normal;
+}
+
+@mixin FS_Medium_Italic {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 500;
+
+    font-style: italic;
+}
+
+@mixin FS_Bold {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 700;
+
+    font-style: normal;
+}
+@mixin FS_Super_Bold {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 900;
+
+    font-style: normal;
+}
+
+@mixin FS_Bold_Italic {
+    font-family: 'Fira Sans', sans-serif;
+
+    font-weight: 700;
+
+    font-style: italic;
+}
+
+
+html {
+    @include FS_Regular;
+}
+
+p {
+    font-family: 'Ubuntu', sans-serif;
+    line-height: 30px;
+    color: var(--offset-white);
+    font-size: 16pt;
+}
+
+a{
+    color: var(--offset-white);
+
+    &:hover {
+        color: var(--second);
+        cursor: pointer;
+    }
+}
