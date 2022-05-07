@@ -1,133 +1,113 @@
-// This is an example test file. Hardhat will run every *.js file in `test/`,
-// so feel free to add new ones.
-
-// Hardhat tests are normally written with Mocha and Chai.
-
-// We import Chai to use its asserting functions here.
 const { expect } = require("chai");
+const { ethers, waffle } = require("hardhat");
+const { getEvent } = require("./helpers");
+const { BigNumber } = require("ethers");
 
-// `describe` is a Mocha function that allows you to organize your tests. It's
-// not actually needed, but having your tests organized makes debugging them
-// easier. All Mocha functions are available in the global scope.
+const provider = waffle.provider;
+async function getGalleryAddress(tx) {
+  const receipt = await tx.wait();
+  const event = getEvent(receipt, "GalleryCreated");
+  return event[0].args["_galleryAddress"];
+}
 
-// `describe` receives the name of a section of your test suite, and a callback.
-// The callback must define the tests of that section. This callback can't be
-// an async function.
-describe("Token contract", function () {
-  // Mocha has four functions that let you hook into the the test runner's
-  // lifecycle. These are: `before`, `beforeEach`, `after`, `afterEach`.
-
-  // They're very useful to setup the environment for tests, and to clean it
-  // up after they run.
-
-  // A common pattern is to declare some variables, and assign them in the
-  // `before` and `beforeEach` callbacks.
-
-  let Token;
-  let hardhatToken;
+describe("Token contract", () => {
+  let gallery;
+  let galleryFactory;
+  let gallery1;
+  let gallery2;
+  let testNft;
+  let addrs;
   let owner;
   let addr1;
   let addr2;
-  let addrs;
 
-  // `beforeEach` will run before each test, re-deploying the contract every
-  // time. It receives a callback, which can be async.
-  beforeEach(async function () {
-    // Get the ContractFactory and Signers here.
-    Token = await ethers.getContractFactory("Token");
+  beforeEach(async () => {
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    // To deploy our contract, we just have to call Token.deploy() and await
-    // for it to be deployed(), which happens onces its transaction has been
-    // mined.
-    hardhatToken = await Token.deploy();
+    TestNft = await ethers.getContractFactory("TestNFT");
+    testNft = await TestNft.deploy("Test NFT", "TNFT");
+    await testNft.deployed();
 
-    // We can interact with the contract by calling `hardhatToken.method()`
-    await hardhatToken.deployed();
+    await testNft.connect(addr1).mint();
+    await testNft.connect(addr2).mint();
+
+    Gallery = await ethers.getContractFactory("Gallery");
+    gallery = await Gallery.deploy();
+    await gallery.deployed();
+
+    GalleryFactory = await ethers.getContractFactory("GalleryFactory");
+    galleryFactory = await GalleryFactory.deploy(gallery.address);
+    await galleryFactory.deployed();
+
+    const tx1 = await galleryFactory.createGallery("Gallery1", "Test description 1", ethers.utils.parseEther("25"));
+    gallery1 = Gallery.attach(getGalleryAddress(tx1));
+
+    const tx2 = await galleryFactory.createGallery("Gallery2", "Test description 2", ethers.utils.parseEther("25"));
+    gallery2 = Gallery.attach(getGalleryAddress(tx2));
   });
 
-  // You can nest describe calls to create subsections.
-  describe("Deployment", function () {
-    // `it` is another Mocha function. This is the one you use to define your
-    // tests. It receives the test name, and a callback function.
-
-    // If the callback function is async, Mocha will `await` it.
-    it("Should set the right owner", async function () {
-      // Expect receives a value, and wraps it in an assertion objet. These
-      // objects have a lot of utility methods to assert values.
-
-      // This test expects the owner variable stored in the contract to be equal
-      // to our Signer's owner.
-      expect(await hardhatToken.owner()).to.equal(owner.address);
+  describe("Deployment", () => {
+    it("GalleryFactory: Should set correct library address", async () => {
+      expect(await galleryFactory.libraryAddress()).to.equal(gallery.address);
     });
-
-    it("Should assign the total supply of tokens to the owner", async function () {
-      const ownerBalance = await hardhatToken.balanceOf(owner.address);
-      expect(await hardhatToken.totalSupply()).to.equal(ownerBalance);
+    it("Gallery1(Proxy): Should be deployed and contain gallery name", async () => {
+      expect(await gallery1.name()).to.equal("Gallery1");
+    });
+    it("Gallery2(Proxy): Should be deployed and contain gallery name", async () => {
+      expect(await gallery2.name()).to.equal("Gallery2");
+    });
+    it("TestNFT: Should be deployed and give deployer balance of 5", async () => {
+      expect(await testNft.balanceOf(owner.address)).to.equal(5);
     });
   });
 
-  describe("Transactions", function () {
-    it("Should transfer tokens between accounts", async function () {
-      // Transfer 50 tokens from owner to addr1
-      await hardhatToken.transfer(addr1.address, 50);
-      const addr1Balance = await hardhatToken.balanceOf(
-        addr1.address
-      );
-      expect(addr1Balance).to.equal(50);
+  describe("Gallery", () => {
+    it("Should Donate an NFT", async () => {
+      const totalDonationsBefore = await gallery1.totalNftDonations();
+      await testNft.connect(addr1).approve(gallery1.address, 6);
+      const tx = await gallery1
+        .connect(addr1)
+        .donate(testNft.address, 6, ethers.utils.parseEther("25"));
+      const receipt = await tx.wait();
+      const event = getEvent(receipt, "Donated");
+      const donationId = event[0].args["donationID"];
+      const donation = await gallery1.donations(donationId);
+      const totalDonationsAfter = await gallery1.totalNftDonations();
 
-      // Transfer 50 tokens from addr1 to addr2
-      // We use .connect(signer) to send a transaction from another account
-      await hardhatToken.connect(addr1).transfer(addr2.address, 50);
-      const addr2Balance = await hardhatToken.balanceOf(
-        addr2.address
-      );
-      expect(addr2Balance).to.equal(50);
+      expect(totalDonationsBefore.toNumber() + 1).to.equal(totalDonationsAfter);
+      expect(await testNft.ownerOf(6)).to.equal(await gallery1.address);
+      expect(donation["price"]).to.equal(ethers.utils.parseEther("25"));
+      expect(donation["donator"]).to.equal(addr1.address);
+      expect(donation["tokenId"]).to.equal(6);
+      expect(donation["collection"]).to.equal(testNft.address);
+      expect(donation["sold"]).to.equal(false);
     });
-
-    it("Should fail if sender doesn’t have enough tokens", async function () {
-      const initialOwnerBalance = await hardhatToken.balanceOf(
-        owner.address
-      );
-
-      // Try to send 1 token from addr1 (0 tokens) to owner (1000 tokens).
-      // `require` will evaluate false and revert the transaction.
-      await expect(
-        hardhatToken.connect(addr1).transfer(owner.address, 1)
-      ).to.be.revertedWith("Not enough tokens");
-
-      // Owner balance shouldn't have changed.
-      expect(await hardhatToken.balanceOf(owner.address)).to.equal(
-        initialOwnerBalance
-      );
+    it("Should buy a donated NFT", async () => {
+      const totalDonationsBefore = await gallery1.totalDonations();
+      await testNft.connect(addr1).approve(gallery1.address, 6);
+      const tx = await gallery1
+        .connect(addr1)
+        .donate(testNft.address, 6, ethers.utils.parseEther("25"));
+      await gallery1
+        .connect(addr2)
+        .buy(1, { value: ethers.utils.parseEther("25") });
+      const totalDonationsAfter = await gallery1.totalDonations();
+      expect(await testNft.ownerOf(6)).to.equal(addr2.address);
+      expect(ethers.utils.parseEther("25")).to.equal(totalDonationsAfter);
     });
+    it("Should allow guardian to withdraw", async () => {
+      await testNft.connect(addr1).approve(gallery1.address, 6);
+      await gallery1
+        .connect(addr1)
+        .donate(testNft.address, 6, ethers.utils.parseEther("25"));
+      await gallery1
+        .connect(addr2
+        .buy(1, { value: ethers.utils.parseEther("25") });
 
-    it("Should update balances after transfers", async function () {
-      const initialOwnerBalance = await hardhatToken.balanceOf(
-        owner.address
-      );
-
-      // Transfer 100 tokens from owner to addr1.
-      await hardhatToken.transfer(addr1.address, 100);
-
-      // Transfer another 50 tokens from owner to addr2.
-      await hardhatToken.transfer(addr2.address, 50);
-
-      // Check balances.
-      const finalOwnerBalance = await hardhatToken.balanceOf(
-        owner.address
-      );
-      expect(finalOwnerBalance).to.equal(initialOwnerBalance - 150);
-
-      const addr1Balance = await hardhatToken.balanceOf(
-        addr1.address
-      );
-      expect(addr1Balance).to.equal(100);
-
-      const addr2Balance = await hardhatToken.balanceOf(
-        addr2.address
-      );
-      expect(addr2Balance).to.equal(50);
+      const balanceBefore = await provider.getBalance(owner.address);
+      const tx = await gallery1.withdraw();
+      const receipt = await tx.wait();
+      const balanceAfter = await provider.getBalance(owner.address);
     });
   });
 });

@@ -1,0 +1,32 @@
+.NftItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.2s;
+  margin-bottom: 50px;
+  & > header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    border-radius: 15px;
+    width: 100%;
+    background: var(--second-shade);
+    margin-bottom: 25px;
+  }
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    h3 {
+      text-align: right;
+    }
+  }
+  h4 {
+    color: var(--offset-white);
+  }
+}

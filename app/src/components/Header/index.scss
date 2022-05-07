@@ -1,20 +1,25 @@
-.header{
-    width: 100%;
-    height: 75px;
+.header {
+  width: 100%;
+  height: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--first-shade);
+  flex-direction: row;
+  position: relative;
+
+  h2 {
+    text-align: center;
+  }
+
+  .side-menu {
+    position: absolute;
+    right: 50px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    background: var(--first-shade);
-    flex-direction: row;
-    position: relative;
-    h2 {
-        text-align:center;
-    }
+    text-decoration: none !important;
 
-    .side-menu {
-        position: absolute;
-        right: 50px;
-        display: flex;
-
-    }
+    width: 400px;
+  }
 }

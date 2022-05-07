@@ -1,0 +1,32 @@
+.galleryItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.2s;
+  margin-bottom: 50px;
+  p {
+    min-height: 150px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+  & > header {
+    display: flex;
+    justify-content: space-between;
+  }
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+  }
+
+  & > body {
+    display: flex;
+    justify-content: space-between;
+    h3 {
+      text-align: right;
+    }
+  }
+  h4,
+  h5 {
+    color: var(--offset-white);
+  }
+}

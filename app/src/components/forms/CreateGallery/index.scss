@@ -1,0 +1,10 @@
+.createGallery {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.2s;
+  .button {
+    margin-top: 50px;
+    max-width: none;
+  }
+}

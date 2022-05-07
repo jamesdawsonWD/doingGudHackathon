@@ -1,15 +1,35 @@
-@import './colours';
-@import './reset';
-@import './fonts';
-@import './header';
-@import './mixins';
-@import './forms';
-@import './scrollbar';
-@import './charts';
+@import "./colours";
+@import "./reset";
+@import "./fonts";
+@import "./header";
+@import "./mixins";
+@import "./forms";
+@import "./scrollbar";
+@import "./charts";
 
 html {
-    height: 100vh;
-    width: 100vw;
-    overflow-x: hidden;
-    background: var(--background-color);
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background: var(--background-color);
+}
+
+.router-wrapper {
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  & > * {
+    min-width: 50%;
+  }
+  padding-bottom: 0;
+}
+
+.box {
+  background: var(--first-shade);
+  border-radius: 30px;
+  padding: 25px;
+}
+
+a {
+  text-decoration: none;
 }

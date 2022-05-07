@@ -1,35 +1,41 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "bootstrap": "^4.4.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "app",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+        "format": "prettier .  --write"
+    },
+    "dependencies": {
+        "core-js": "^3.8.3",
+        "moralis": "^1.5.9",
+        "pinia": "^2.0.13",
+        "ethereum-blockies-base64": "^1.0.2",
+        "vanilla-tilt": "^1.7.2",
+        "vue": "^3.2.13",
+        "vue-class-component": "^8.0.0-rc.1",
+        "vue-property-decorator": "^9.1.2",
+        "vue-router": "^4.0.3",
+        "vue-svg-inline-plugin": "^2.2.0",
+        "vuex": "^4.0.0"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "~5.0.0",
+        "@vue/cli-plugin-router": "~5.0.0",
+        "@vue/cli-plugin-typescript": "~5.0.0",
+        "@vue/cli-plugin-vuex": "~5.0.0",
+        "@vue/cli-service": "~5.0.0",
+        "eslint": "^8.13.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-vue": "^8.6.0",
+        "prettier": "2.6.2",
+        "sass": "^1.32.7",
+        "sass-loader": "^12.0.0",
+        "typescript": "~4.5.5",
+        "vue-svg-loader": "^0.16.0",
+        "vuex-class": "^0.3.2",
+        "vuex-module-decorators": "^2.0.0"
+    }
 }

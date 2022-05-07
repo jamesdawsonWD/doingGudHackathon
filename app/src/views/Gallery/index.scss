@@ -1,0 +1,41 @@
+.Gallery {
+  width: 50%;
+
+  & > header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+
+  h4 {
+    color: var(--offset-white);
+  }
+  & > body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+  }
+  & > .item {
+    margin-top: 25px;
+  }
+
+  .donated-title {
+    margin-top: 50px;
+  }
+  .no-items {
+    text-align: center;
+    color: var(--first-shade);
+    margin-top: 100px;
+  }
+  .donated {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 30px;
+    & > article {
+      margin-top: 25px;
+    }
+  }
+}

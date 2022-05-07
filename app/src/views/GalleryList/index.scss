@@ -1,0 +1,15 @@
+.GalleryList {
+  width: 50%;
+  & > header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+
+  .no-items {
+    text-align: center;
+    color: var(--first-shade);
+    margin-top: 100px;
+  }
+}

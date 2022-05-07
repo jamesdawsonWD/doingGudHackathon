@@ -1,0 +1,19 @@
+.Wallet {
+  & > header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    align-items: center;
+  }
+  .no-items {
+    text-align: center;
+    color: var(--first-shade);
+    margin-top: 100px;
+  }
+  & > body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-gap: 30px;
+  }
+}
